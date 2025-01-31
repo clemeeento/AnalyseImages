@@ -37,9 +37,13 @@ public:
         // Compter le nombre total de pixels contours dans l'image de référence
         contoursReference = cv::countNonZero(imageReference);
 
-        // Trouver les pixels contours correctement détectés (intersection entre les deux images)
+        // Création d'une copie dilatée de l'image de référence pour prendre en compte le voisinage 3x3
+        cv::Mat referenceDilatee;
+        cv::dilate(imageReference, referenceDilatee, cv::Mat::ones(3, 3, CV_8U));
+
+        // Trouver les pixels contours correctement détectés en tenant compte du voisinage
         cv::Mat intersection;
-        cv::bitwise_and(imageContours, imageReference, intersection);
+        cv::bitwise_and(imageContours, referenceDilatee, intersection);
         contoursCorrects = cv::countNonZero(intersection);
 
         // Calculer les faux positifs (pixels détectés comme contours mais absents dans la référence)
