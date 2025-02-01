@@ -26,7 +26,7 @@ void EvaluateurContours::ComparerContours(const cv::Mat &imageContours, const cv
     // Compter le nombre total de pixels contours dans l'image de référence
     contoursReference = cv::countNonZero(imageReference);
 
-    // Trouver les pixels contours correctement détectés en tenant compte du voisinage
+    // Trouver les pixels contours correctement détectés (intersection entre les deux images)
     cv::Mat intersection;
     cv::bitwise_and(imageContours, contoursReference, intersection);
     contoursCorrects = cv::countNonZero(intersection);
