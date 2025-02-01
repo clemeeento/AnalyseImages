@@ -55,4 +55,20 @@ void ExportCSVCanny(const std::string& nomFichier,
                const std::vector<std::string> &nomsImages,
                int nombreImages);
 
+// Fonction pour exporter les moyennes dans un fichier CSV en colonnes avec espaces entre les méthodes
+// nomFichier : nom du fichier CSV
+// moyennesSobel : moyennes des résultats pour Sobel
+// moyennesLaplace : moyennes des résultats pour Laplace
+// moyennesCanny : moyennes des résultats pour Canny
+// nomsLignesSobel : noms des lignes pour Sobel
+// nomsLignesLaplace : noms des lignes pour Laplace
+// nomsLignesCanny : noms des lignes pour Canny
+void ExportCSVMoyenne(const std::string& nomFichier,
+                      const double moyennesSobel[5],
+                      const double moyennesLaplace[5],
+                      const double moyennesCanny[6],
+                      const std::vector<std::string>& nomsLignesSobel,
+                      const std::vector<std::string>& nomsLignesLaplace,
+                      const std::vector<std::string>& nomsLignesCanny);
+
 #endif // FONCTIONS_HPP

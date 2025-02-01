@@ -178,3 +178,41 @@ void ExportCSVCanny(const std::string &nomFichier,
     fichier.close();
     std::cout << "Fichier CSV genere avec succes : " << nomFichier << std::endl;
 }
+
+// Fonction pour exporter les moyennes dans un fichier CSV en colonnes avec espaces entre les méthodes
+void ExportCSVMoyenne(const std::string &nomFichier,
+                      const double moyennesSobel[5],
+                      const double moyennesLaplace[5],
+                      const double moyennesCanny[6],
+                      const std::vector<std::string> &nomsLignesSobel,
+                      const std::vector<std::string> &nomsLignesLaplace,
+                      const std::vector<std::string> &nomsLignesCanny)
+{
+    // Création du fichier CSV (écrase s'il existe déjà)
+    std::ofstream fichier(nomFichier, std::ios::out);
+
+    // Vérifier si le fichier est bien ouvert
+    if (!fichier)
+    {
+        std::cerr << "Erreur : Impossible de créer le fichier " << nomFichier << std::endl;
+        return;
+    }
+
+    // Écriture de l'en-tête (nom des méthodes)
+    fichier << "Description;Sobel;;Description;Laplace;;Description;Canny\n";
+
+    // Écriture des lignes avec espace entre chaque méthode
+    for (size_t i = 0; i < 5; i = i + 1)
+    {
+        fichier << nomsLignesSobel[i] << ";" << moyennesSobel[i] << ";;"  // Sobel et colonne vide
+                << nomsLignesLaplace[i] << ";" << moyennesLaplace[i] << ";;" // Laplace et colonne vide
+                << nomsLignesCanny[i] << ";" << moyennesCanny[i] << "\n"; // Canny
+    }
+
+    // Écriture de la dernière ligne spécifique à Canny (qui a une valeur supplémentaire)
+    fichier << ";;;;;;" << nomsLignesCanny[5] << ";" << moyennesCanny[5] << "\n";
+
+    // Fermeture du fichier
+    fichier.close();
+    std::cout << "Fichier CSV genere avec succes : " << nomFichier << std::endl;
+}
