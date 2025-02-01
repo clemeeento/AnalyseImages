@@ -30,11 +30,6 @@ void CreerTableauImages(std::vector<cv::Mat>& tableau, const std::string& nomDos
     }
 }
 
-// Fonction pour extraire le nom du fichier sans l'extension
-#include <iostream>
-#include <vector>
-#include <opencv2/opencv.hpp>
-
 // Fonction pour récupérer les noms de fichiers d'un dossier sans extension
 void RecupererNomsFichiers(std::vector<std::string>& nomsImages, const std::string& nomDossier)
 {
@@ -65,8 +60,6 @@ void RecupererNomsFichiers(std::vector<std::string>& nomsImages, const std::stri
         nomsImages.push_back(nomSansExtension); // Ajouter au tableau
     }
 }
-
-
 
 // Fonction pour afficher une image
 void AfficherImage(const std::string& nomFenetre, const cv::Mat& image)

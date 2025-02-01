@@ -22,10 +22,10 @@ void Affichage::InitialiserTableaux()
 }
 
 // Fonction pour afficher les contours avec la méthode de Sobel (ChatGPT)
-
 void Affichage::AfficherContoursSobel()
 {
     std::cout << "Pour naviguer, appuyez sur \"q\" pour afficher l'image precedente et sur \"d\" pour l'image suivante (assurez-vous d'etre dans la bonne fenetre).\n";
+    std::cout << "Pour revenir au menu, appuyez sur la touche ESC.\n";
 
     if (tableauOriginales.empty()){
         std::cerr << "Erreur : Aucune image originale disponible pour afficher les contours Sobel !" << std::endl;
@@ -80,12 +80,11 @@ void Affichage::AfficherContoursSobel()
     cv::destroyWindow("Contours Sobel");
 }
 
-
-
 // Fonction pour afficher les contours avec la méthode de Laplace (ChatGPT)
 void Affichage::AfficherContoursLaplace()
 {
     std::cout << "Pour naviguer, appuyez sur \"q\" pour afficher l'image precedente et sur \"d\" pour l'image suivante (assurez-vous d'etre dans la bonne fenetre).\n";
+    std::cout << "Pour revenir au menu, appuyez sur la touche ESC.\n";
 
     if (tableauOriginales.empty()){
         std::cerr << "Erreur : Aucune image originale disponible pour afficher les contours Laplace !" << std::endl;
@@ -140,11 +139,11 @@ void Affichage::AfficherContoursLaplace()
     cv::destroyWindow("Contours Laplace");
 }
 
-
 // Fonction pour afficher les contours avec la méthode de Canny (ChatGPT)
 void Affichage::AfficherContoursCanny()
 {
     std::cout << "Pour naviguer, appuyez sur \"q\" pour afficher l'image precedente et sur \"d\" pour l'image suivante (assurez-vous d'etre dans la bonne fenetre).\n";
+    std::cout << "Pour revenir au menu, appuyez sur la touche ESC.\n";
 
     if (tableauOriginales.empty()){
         std::cerr << "Erreur : Aucune image originale disponible pour afficher les contours Canny !" << std::endl;
