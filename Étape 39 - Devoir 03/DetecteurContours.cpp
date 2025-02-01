@@ -1,7 +1,7 @@
 #include "DetecteurContours.hpp"
 
 // Détection des contours avec Sobel
-cv::Mat DetecteurContours::DetecterSobel(const cv::Mat &image, int tailleNoyau, int tailleNoyauGaussien)
+cv::Mat DetecteurContours::DetecterSobel(const cv::Mat &image, int tailleNoyauSobel, int tailleNoyauGaussien)
 {
     // Vérifier si l'image est valide
     if (image.empty())
@@ -11,12 +11,13 @@ cv::Mat DetecteurContours::DetecterSobel(const cv::Mat &image, int tailleNoyau, 
     }
 
     // Appliquer un flou gaussien pour réduire le bruit
-    cv::GaussianBlur(image, image, cv::Size(tailleNoyauGaussien, tailleNoyauGaussien), 1.0);
+    cv::Mat imageFloue;
+    cv::GaussianBlur(image, imageFloue, cv::Size(tailleNoyauGaussien, tailleNoyauGaussien), 1.0);
 
     // Calcul des gradients de Sobel en X et Y
     cv::Mat gradientX, gradientY, gradientTotal;
-    cv::Sobel(image, gradientX, CV_32F, 1, 0, tailleNoyau);
-    cv::Sobel(image, gradientY, CV_32F, 0, 1, tailleNoyau);
+    cv::Sobel(imageFloue, gradientX, CV_32F, 1, 0, tailleNoyauSobel);
+    cv::Sobel(imageFloue, gradientY, CV_32F, 0, 1, tailleNoyauSobel);
 
     // Magnitude des gradients pour obtenir les contours
     cv::Mat magnitude;
@@ -43,11 +44,12 @@ cv::Mat DetecteurContours::DetecterLaplace(const cv::Mat &image, int tailleNoyau
     }
 
     // Appliquer un flou gaussien pour réduire le bruit
-    cv::GaussianBlur(image, image, cv::Size(tailleNoyauGaussien, tailleNoyauGaussien), 1.0);
+    cv::Mat imageFloue;
+    cv::GaussianBlur(image, imageFloue, cv::Size(tailleNoyauGaussien, tailleNoyauGaussien), 1.0);
 
     // Appliquer le filtre Laplacien
     cv::Mat laplace;
-    cv::Laplacian(image, laplace, CV_16S, tailleNoyauLaplace);
+    cv::Laplacian(imageFloue, laplace, CV_16S, tailleNoyauLaplace);
 
     // Conversion en format affichable
     cv::Mat contours;
@@ -70,11 +72,12 @@ cv::Mat DetecteurContours::DetecterCanny(const cv::Mat &image, int seuilBas, int
     }
 
     // Appliquer un flou gaussien pour réduire le bruit
-    cv::GaussianBlur(image, image, cv::Size(tailleNoyauGaussien, tailleNoyauGaussien), 1.0);
+    cv::Mat imageFloue;
+    cv::GaussianBlur(image, imageFloue, cv::Size(tailleNoyauGaussien, tailleNoyauGaussien), 1.0);
 
     // Appliquer le filtre de Canny
     cv::Mat contours;
-    cv::Canny(image, contours, seuilBas, seuilHaut);
+    cv::Canny(imageFloue, contours, seuilBas, seuilHaut);
 
     // Inverser les couleurs
     contours = 255 - contours;

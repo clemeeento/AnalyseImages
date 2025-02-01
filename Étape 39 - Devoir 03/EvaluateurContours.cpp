@@ -26,13 +26,9 @@ void EvaluateurContours::ComparerContours(const cv::Mat &imageContours, const cv
     // Compter le nombre total de pixels contours dans l'image de référence
     contoursReference = cv::countNonZero(imageReference);
 
-    // Création d'une copie dilatée de l'image de référence pour prendre en compte le voisinage 3x3
-    cv::Mat referenceDilatee;
-    cv::dilate(imageReference, referenceDilatee, cv::Mat::ones(3, 3, CV_8U));
-
     // Trouver les pixels contours correctement détectés en tenant compte du voisinage
     cv::Mat intersection;
-    cv::bitwise_and(imageContours, referenceDilatee, intersection);
+    cv::bitwise_and(imageContours, contoursReference, intersection);
     contoursCorrects = cv::countNonZero(intersection);
 
     // Calculer les faux positifs (pixels détectés comme contours mais absents dans la référence)
@@ -78,13 +74,13 @@ double EvaluateurContours::CalculerTauxFauxNegatifs()
 // Fonction pour afficher les résultats
 void EvaluateurContours::AfficherResultats()
 {
-    std::cout << "Contours détectés     : " << contoursDetectes << std::endl;
-    std::cout << "Contours référence    : " << contoursReference << std::endl;
+    std::cout << "Contours detectes     : " << contoursDetectes << std::endl;
+    std::cout << "Contours reference    : " << contoursReference << std::endl;
     std::cout << "Contours corrects     : " << contoursCorrects << std::endl;
     std::cout << "Faux positifs         : " << fauxPositifs << std::endl;
-    std::cout << "Faux négatifs         : " << fauxNegatifs << std::endl;
+    std::cout << "Faux negatifs         : " << fauxNegatifs << std::endl;
     std::cout << "Performance (P)       : " << CalculerPerformance() << std::endl;
     std::cout << "Taux de faux positifs : " << CalculerTauxFauxPositifs() << std::endl;
-    std::cout << "Taux de faux négatifs : " << CalculerTauxFauxNegatifs() << std::endl;
+    std::cout << "Taux de faux negatifs : " << CalculerTauxFauxNegatifs() << std::endl;
 }
 
