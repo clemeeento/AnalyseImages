@@ -432,7 +432,6 @@ void MeilleursParametresGenerauxCanny(const std::vector<cv::Mat> &tableauOrigina
         }
     }
     moyennesCanny[2] = arrondi;
-    std::cout << "moyennesCanny[2] : " << moyennesCanny[2] << std::endl;
 
     // Résultats : performance, tauxFauxPositifs, tauxFauxNegatifs
     moyennesCanny[3] = sommePerformance / nombreImages;

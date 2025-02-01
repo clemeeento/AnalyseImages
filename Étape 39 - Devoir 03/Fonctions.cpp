@@ -30,9 +30,151 @@ void CreerTableauImages(std::vector<cv::Mat>& tableau, const std::string& nomDos
     }
 }
 
+// Fonction pour extraire le nom du fichier sans l'extension
+#include <iostream>
+#include <vector>
+#include <opencv2/opencv.hpp>
+
+// Fonction pour récupérer les noms de fichiers d'un dossier sans extension
+void RecupererNomsFichiers(std::vector<std::string>& nomsImages, const std::string& nomDossier)
+{
+    cv::String chemin(nomDossier);  // Convertir le nom du dossier en cv::String pour OpenCV
+    std::vector<cv::String> nomsFichiers; // Stocker les noms des fichiers du dossier
+    cv::glob(chemin, nomsFichiers); // Lire les fichiers présents
+
+    nomsImages.clear(); // Nettoyer le vecteur avant ajout
+
+    // Parcours des fichiers pour extraire leur nom sans extension
+    for (const auto& fichier : nomsFichiers)
+    {
+        size_t dernierSlash = fichier.find_last_of("/\\"); // Trouver le dernier '/' ou '\'
+        size_t dernierPoint = fichier.find_last_of(".");   // Trouver le dernier '.'
+
+        std::string nomSansExtension;
+        if (dernierPoint == std::string::npos || dernierPoint < dernierSlash)
+        {
+            // Si aucun point trouvé ou qu'il est avant le dernier slash, garder tout le nom
+            nomSansExtension = fichier.substr(dernierSlash + 1);
+        }
+        else
+        {
+            // Extraire uniquement le nom sans l'extension
+            nomSansExtension = fichier.substr(dernierSlash + 1, dernierPoint - dernierSlash - 1);
+        }
+
+        nomsImages.push_back(nomSansExtension); // Ajouter au tableau
+    }
+}
+
+
+
 // Fonction pour afficher une image
 void AfficherImage(const std::string& nomFenetre, const cv::Mat& image)
 {
     // Afficher l'image avec OpenCV
     cv::imshow(nomFenetre, image);
+}
+
+void ExportCSV(const std::string &nomFichier,
+               int meilleursParametresGeneraux[][2], // Tableau de paramètres (ex: tailleNoyau, tailleNoyauGaussien)
+               double resultatsMeilleursParametresGeneraux[][3], // Tableau des résultats (ex: P, TFP, TFN)
+               const std::vector<std::string> &nomsLignes, // Tableau contenant les noms des lignes
+               const std::vector<std::string> &nomsImages, // Tableau contenant les noms des images
+               int nombreImages) // Nombre d'images dans le tableau
+{
+    // Création du fichier avant ouverture (écrase s'il existe)
+    std::ofstream fichier(nomFichier, std::ios::out);
+
+    // Vérifier si le fichier est bien ouvert
+    if (!fichier)
+    {
+        std::cerr << "Erreur : Impossible de creer le fichier " << nomFichier << std::endl;
+        return;
+    }
+
+    // Écriture de la première ligne (nom des images)
+    fichier << ";"; // Première case vide
+    for (int i = 0; i < nombreImages; i = i + 1)
+    {
+        fichier << nomsImages[i] << ";";
+    }
+    fichier << "\n";
+
+    // Écriture des meilleurs paramètres généraux (ex: tailleNoyau, tailleNoyauGaussien)
+    for (int i = 0; i < 2; i = i + 1) // Nombre de paramètres (ex: 2 = tailleNoyau, tailleNoyauGaussien)
+    {
+        fichier << nomsLignes[i] << ";";
+        for (int j = 0; j < nombreImages; j = j + 1)
+        {
+            fichier << meilleursParametresGeneraux[j][i] << ";";
+        }
+        fichier << "\n";
+    }
+
+    // Écriture des résultats des meilleurs paramètres (ex: Performance, TFP, TFN)
+    for (int i = 0; i < 3; i = i + 1) // Nombre de résultats (ex: 3 = P, TFP, TFN)
+    {
+        fichier << nomsLignes[i + 2] << ";"; // Décalage pour accéder aux bons noms
+        for (int j = 0; j < nombreImages; j = j + 1)
+        {
+            fichier << resultatsMeilleursParametresGeneraux[j][i] << ";";
+        }
+        fichier << "\n";
+    }
+
+    // Fermer le fichier
+    fichier.close();
+    std::cout << "Fichier CSV genere avec succes : " << nomFichier << std::endl;
+}
+
+void ExportCSVCanny(const std::string &nomFichier,
+               int meilleursParametresGeneraux[][3], // Tableau de paramètres (ex: tailleNoyau, tailleNoyauGaussien)
+               double resultatsMeilleursParametresGeneraux[][3], // Tableau des résultats (ex: P, TFP, TFN)
+               const std::vector<std::string> &nomsLignes, // Tableau contenant les noms des lignes
+               const std::vector<std::string> &nomsImages, // Tableau contenant les noms des images
+               int nombreImages) // Nombre d'images dans le tableau
+{
+    // Création du fichier avant ouverture (écrase s'il existe)
+    std::ofstream fichier(nomFichier, std::ios::out);
+
+    // Vérifier si le fichier est bien ouvert
+    if (!fichier)
+    {
+        std::cerr << "Erreur : Impossible de creer le fichier " << nomFichier << std::endl;
+        return;
+    }
+
+    // Écriture de la première ligne (nom des images)
+    fichier << ";"; // Première case vide
+    for (int i = 0; i < nombreImages; i = i + 1)
+    {
+        fichier << nomsImages[i] << ";";
+    }
+    fichier << "\n";
+
+    // Écriture des meilleurs paramètres généraux (ex: tailleNoyau, tailleNoyauGaussien)
+    for (int i = 0; i < 3; i = i + 1) // Nombre de paramètres (ex: 2 = tailleNoyau, tailleNoyauGaussien)
+    {
+        fichier << nomsLignes[i] << ";";
+        for (int j = 0; j < nombreImages; j = j + 1)
+        {
+            fichier << meilleursParametresGeneraux[j][i] << ";";
+        }
+        fichier << "\n";
+    }
+
+    // Écriture des résultats des meilleurs paramètres (ex: Performance, TFP, TFN)
+    for (int i = 0; i < 3; i = i + 1) // Nombre de résultats (ex: 3 = P, TFP, TFN)
+    {
+        fichier << nomsLignes[i + 3] << ";"; // Décalage pour accéder aux bons noms
+        for (int j = 0; j < nombreImages; j = j + 1)
+        {
+            fichier << resultatsMeilleursParametresGeneraux[j][i] << ";";
+        }
+        fichier << "\n";
+    }
+
+    // Fermer le fichier
+    fichier.close();
+    std::cout << "Fichier CSV genere avec succes : " << nomFichier << std::endl;
 }
