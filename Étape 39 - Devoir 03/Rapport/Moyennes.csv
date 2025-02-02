@@ -1,0 +1,7 @@
+Description;Sobel;;Description;Laplace;;Description;Canny
+Taille Noyau Sobel;1;;Taille Noyau Laplace;1;;Seuil Bas;225
+Taille Noyau Gaussien;7;;Taille Noyau Gaussien;5;;Seuil Haut;250
+Performance;1.0132;;Performance;1.0224;;Taille Noyau Gaussien;7
+Taux Faux Positifs;0;;Taux Faux Positifs;0;;Performance;1.01608
+Taux Faux Negatifs;-0.0132035;;Taux Faux Negatifs;-0.0223965;;Taux Faux Positifs;0
+;;;;;;Taux Faux Negatifs;-0.0160757

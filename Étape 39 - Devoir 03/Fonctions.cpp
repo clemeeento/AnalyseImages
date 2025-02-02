@@ -23,7 +23,7 @@ void CreerTableauImages(std::vector<cv::Mat>& tableau, const std::string& nomDos
     cv::Mat image; // Image à importer
 
     // Boucle pour importer les images
-    for(size_t i = 0; i < nomsFichiers.size(); ++i)
+    for(size_t i = 0; i < nomsFichiers.size(); i = i + 1)
     {
         ImporterImage(nomsFichiers[i], image); // Importer l'image
         tableau.push_back(image); // Ajouter l'image au tableau
